@@ -1,23 +1,23 @@
 import Long from 'long';
 import utf8 from "@protobufjs/utf8";
 
-declare type bool = boolean;
-declare type i8 = number;
-declare type u8 = number;
-declare type i16 = number;
-declare type u16 = number;
-declare type i32 = number;
-declare type u32 = number;
-declare type s32 = number;
-declare type f32 = number;
-declare type sf32 = number;
-declare type i64 = Long;
-declare type u64 = Long;
-declare type s64 = Long;
-declare type f64 = Long;
-declare type sf64 = Long;
-declare type float = number;
-declare type double = number;
+export  type bool = boolean;
+export  type i8 = number;
+export  type u8 = number;
+export  type i16 = number;
+export  type u16 = number;
+export  type i32 = number;
+export  type u32 = number;
+export  type s32 = number;
+export  type f32 = number;
+export  type sf32 = number;
+export  type i64 = Long;
+export  type u64 = Long;
+export  type s64 = Long;
+export  type f64 = Long;
+export  type sf64 = Long;
+export  type float = number;
+export  type double = number;
 
 function floatToRawIntBits(val: float): i32 {
     const sign = val < 0 ? 1 : 0;
@@ -152,7 +152,7 @@ class IntSerializer {
     }
 }
 
-interface Input {
+export interface Input {
     handleUnknownField(fieldNumber: i32): void;
 
     readFieldNumber(): i32;
@@ -243,7 +243,7 @@ interface Input {
 
 }
 
-class LinkedBuffer {
+export class LinkedBuffer {
     static MIN_BUFFER_SIZE = 256;
     static DEFAULT_BUFFER_SIZE = 512;
 
@@ -278,7 +278,7 @@ class LinkedBuffer {
 
 }
 
-interface Output {
+export interface Output {
 
     writeBOOL(fieldNumber: i32, value: bool): void
 
@@ -433,7 +433,7 @@ class ProtobjError extends Error {
     }
 }
 
-class WriteSession {
+export class WriteSession {
 
     public head: LinkedBuffer;
 
@@ -499,7 +499,7 @@ interface WriteSink {
 }
 
 
-class ProtobjInput implements Input {
+export class ProtobjInput implements Input {
 
     private buffer: Uint8Array;
     private offset: i32 = 0;
@@ -604,7 +604,7 @@ class ProtobjInput implements Input {
                     result |= (tmp & 0x7f) << 21;
                     result |= (tmp = buffer[this.offset++]) << 28;
                     if (tmp < 0) {
-                        // Discard upper 32 
+                        // Discard upper 32
                         for (let i = 0; i < 5; i++) {
                             if (buffer[this.offset++] >= 0) {
                                 return result;
@@ -1030,6 +1030,7 @@ class WireFormat {
         return (fieldNumber << this.TAG_TYPE_BITS) | wireType;
     }
 }
+
 class WriteSink_BUFFERED implements WriteSink {
     static INSTANCE: WriteSink = new WriteSink_BUFFERED();
 
@@ -1187,6 +1188,7 @@ class WriteSink_BUFFERED implements WriteSink {
         return lb;
     }
 }
+
 class StringSerializer {
 
     static TWO_BYTE_LOWER_LIMIT = 1 << 7;
@@ -1730,7 +1732,7 @@ class StringSerializer {
     }
 }
 
-class ProtobjOutput extends WriteSession implements Output {
+export class ProtobjOutput extends WriteSession implements Output {
 
     constructor(buffer: LinkedBuffer) {
         super(buffer);
@@ -2120,47 +2122,10 @@ class ProtobjOutput extends WriteSession implements Output {
             }
         }
     }
-
-
 }
 
-interface Schema {
+export interface Schema {
     writeTo(output: Output, message: any, polymorphic: boolean): void;
 
     mergeFrom(input: Input, message: any): any;
 }
-
-export {
-    floatToRawIntBits,
-    arraycopy,
-    toCodePoint,
-    isHighSurrogate,
-    longBitsToDouble,
-    doubleToRawLongBits,
-    intBitsToFloat,
-    IntSerializer, LinkedBuffer, ProtobjError,
-    WriteSession, ProtobjInput,
-    WireFormat,
-    WriteSink_BUFFERED,
-    StringSerializer,
-    ProtobjOutput
-};
-export type {
-    bool,
-    i8,
-    u8,
-    i16,
-    u16,
-    i32,
-    u32,
-    s32,
-    f32,
-    sf32,
-    i64,
-    u64,
-    s64,
-    f64,
-    sf64,
-    float,
-    double, Input, Output, WriteSink, Schema
-};
