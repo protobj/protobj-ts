@@ -152,97 +152,6 @@ class IntSerializer {
     }
 }
 
-export interface Input {
-    handleUnknownField(fieldNumber: i32): void;
-
-    readFieldNumber(): i32;
-
-    readBOOL(): bool;
-
-    readBOOL_NoCheck(): bool;
-
-    readI8(): i8;
-
-    readI8_NoCheck(): i8;
-
-    readU8(): u8;
-
-    readU8_NoCheck(): u8;
-
-    readI16(): i16;
-
-    readI16_NoCheck(): i16;
-
-    readU16(): u16;
-
-    readU16_NoCheck(): u16;
-
-    readI32(): i32;
-
-    readI32_NoCheck(): i32;
-
-    readU32(): u32;
-
-    readU32_NoCheck(): u32;
-
-    readS32(): s32;
-
-    readS32_NoCheck(): s32;
-
-    readF32(): f32;
-
-    readF32_NoCheck(): f32;
-
-    readSF32(): sf32;
-
-    readSF32_NoCheck(): sf32;
-
-    readI64(): i64;
-
-    readI64_NoCheck(): i64;
-
-    readU64(): u64;
-
-    readU64_NoCheck(): u64;
-
-    readS64(): s64;
-
-    readS64_NoCheck(): s64;
-
-    readF64(): f64;
-
-    readF64_NoCheck(): f64;
-
-    readSF64(): sf64;
-
-    readSF64_NoCheck(): sf64;
-
-    readSTRING(): string;
-
-    readSTRING_NoCheck(): string;
-
-    readDOUBLE(): double;
-
-    readDOUBLE_NoCheck(): double;
-
-    readFLOAT(): float;
-
-    readFLOAT_NoCheck(): float;
-
-    readMap<K, V>(keyReader: () => K, valueReader: () => V): Map<K, V>;
-
-    readArray<T>(valueReader: () => T): T[];
-
-    readSet<T>(valueReader: () => T): Set<T>;
-
-    readList<T>(valueReader: () => T): Array<T>;
-
-    readMessageStart(): i32;
-
-    readMessageStop(oldLimit: i32): void;
-
-}
-
 export class LinkedBuffer {
     static MIN_BUFFER_SIZE = 256;
     static DEFAULT_BUFFER_SIZE = 512;
@@ -277,98 +186,6 @@ export class LinkedBuffer {
     }
 
 }
-
-export interface Output {
-
-    writeBOOL(fieldNumber: i32, value: bool): void
-
-    writeBOOL_Packed(value: bool): void
-
-    writeI8(fieldNumber: i32, value: i8): void
-
-    writeI8_Packed(value: i8): void
-
-    writeU8(fieldNumber: i32, value: u8): void
-
-    writeU8_Packed(value: u8): void
-
-    writeI16(fieldNumber: i32, value: i16): void
-
-    writeI16_Packed(value: i16): void
-
-    writeU16(fieldNumber: i32, value: u16): void
-
-    writeU16_Packed(value: u16): void
-
-    writeI32(fieldNumber: i32, value: i32): void
-
-    writeI32_Packed(value: i32): void
-
-    writeU32(fieldNumber: i32, value: u32): void
-
-    writeU32_Packed(value: u32): void
-
-    writeS32(fieldNumber: i32, value: s32): void
-
-    writeS32_Packed(value: s32): void
-
-    writeF32(fieldNumber: i32, value: f32): void
-
-    writeF32_Packed(value: f32): void
-
-    writeSF32(fieldNumber: i32, value: sf32): void
-
-    writeSF32_Packed(value: sf32): void
-
-    writeI64(fieldNumber: i32, value: i64): void
-
-    writeI64_Packed(value: i64): void
-
-    writeU64(fieldNumber: i32, value: u64): void
-
-    writeU64_Packed(value: u64): void
-
-    writeS64(fieldNumber: i32, value: s64): void
-
-    writeS64_Packed(value: s64): void
-
-    writeF64(fieldNumber: i32, value: f64): void
-
-    writeF64_Packed(value: f64): void
-
-    writeSF64(fieldNumber: i32, value: sf64): void
-
-    writeSF64_Packed(value: sf64): void
-
-    writeSTRING(fieldNumber: i32, value: string): void
-
-    writeSTRING_Packed(value: string): void
-
-    writeDOUBLE(fieldNumber: i32, value: double): void
-
-    writeDOUBLE_Packed(value: double): void
-
-    writeFLOAT(fieldNumber: i32, value: float): void
-
-    writeFLOAT_Packed(value: float): void
-
-
-    writeMessage(fieldNumber: i32, task: () => void): void
-
-    writeSet<T>(fieldNumber: i32, value: Set<T>, valueWriter: (v0: T) => void): void
-
-    writeList<T>(fieldNumber: i32, value: Array<T>, valueWriter: (v0: T) => void): void
-
-    writeArray<T>(fieldNumber: i32, value: T[], valueWriter: (v0: T) => void): void
-
-    writeBOOLArray(fieldNumber: i32, value: bool[]): void
-
-    writeBOOLList(fieldNumber: i32, value: Array<bool>): void
-
-    writeMap<K, V>(fieldNumber: i32, value: Map<K, V>, keyWriter: (k0: K) => void, valueWrite: (v0: V) => void): void
-
-}
-
 class ProtobjError extends Error {
 
     constructor(message: string) {
@@ -499,7 +316,7 @@ interface WriteSink {
 }
 
 
-export class ProtobjInput implements Input {
+export class Input {
 
     private buffer: Uint8Array;
     private offset: i32 = 0;
@@ -514,7 +331,7 @@ export class ProtobjInput implements Input {
     }
 
 
-    public reset(offset: i32, len: i32): ProtobjInput {
+    public reset(offset: i32, len: i32): Input {
         if (len < 0) {
             throw new Error("length cannot be negative.");
         }
@@ -524,7 +341,7 @@ export class ProtobjInput implements Input {
         return this;
     }
 
-    public setBounds(offset: i32, limit: i32): ProtobjInput {
+    public setBounds(offset: i32, limit: i32): Input {
         this.offset = offset;
         this.limit = limit;
         this.packedLimit = 0;
@@ -1732,13 +1549,13 @@ class StringSerializer {
     }
 }
 
-export class ProtobjOutput extends WriteSession implements Output {
+export class Output extends WriteSession  {
 
     constructor(buffer: LinkedBuffer) {
         super(buffer);
     }
 
-    clear(): ProtobjOutput {
+    clear(): Output {
         super.clear();
         return this;
     }
@@ -1820,12 +1637,12 @@ export class ProtobjOutput extends WriteSession implements Output {
     }
 
     writeS32(fieldNumber: i32, value: s32): void {
-        this.tail = this.sink.writeVarInt32(ProtobjOutput.encodeZigZag32(value), this,
+        this.tail = this.sink.writeVarInt32(Output.encodeZigZag32(value), this,
             this.sink.writeVarInt32(WireFormat.makeTag(fieldNumber, WireFormat.WIRETYPE_VARINT), this, this.tail));
     }
 
     writeS32_Packed(value: s32): void {
-        this.tail = this.sink.writeVarInt32(ProtobjOutput.encodeZigZag32(value), this, this.tail);
+        this.tail = this.sink.writeVarInt32(Output.encodeZigZag32(value), this, this.tail);
     }
 
     writeF32(fieldNumber: i32, value: f32): void {
@@ -1866,11 +1683,11 @@ export class ProtobjOutput extends WriteSession implements Output {
     }
 
     writeS64(fieldNumber: i32, value: s64): void {
-        this.tail = this.sink.writeVarInt64(ProtobjOutput.encodeZigZag64(value), this, this.sink.writeVarInt32(WireFormat.makeTag(fieldNumber, WireFormat.WIRETYPE_VARINT), this, this.tail));
+        this.tail = this.sink.writeVarInt64(Output.encodeZigZag64(value), this, this.sink.writeVarInt32(WireFormat.makeTag(fieldNumber, WireFormat.WIRETYPE_VARINT), this, this.tail));
     }
 
     writeS64_Packed(value: s64): void {
-        this.tail = this.sink.writeVarInt64(ProtobjOutput.encodeZigZag64(value), this, this.tail);
+        this.tail = this.sink.writeVarInt64(Output.encodeZigZag64(value), this, this.tail);
 
     }
 
@@ -1984,7 +1801,7 @@ export class ProtobjOutput extends WriteSession implements Output {
             lastBuffer.buffer[lastBuffer.offset++] =
                 WireFormat.makeTag(fieldNumber, WireFormat.WIRETYPE_LENGTH_DELIMITED);
         } else {
-            this.tail = lastBuffer = ProtobjOutput.writeRawVarInt32(
+            this.tail = lastBuffer = Output.writeRawVarInt32(
                 WireFormat.makeTag(fieldNumber, WireFormat.WIRETYPE_LENGTH_DELIMITED), this, this.tail);
         }
 
@@ -2000,7 +1817,7 @@ export class ProtobjOutput extends WriteSession implements Output {
 
             const msgSize: i32 = this.size - lastSize;
 
-            const delimited: Uint8Array = new Uint8Array(ProtobjOutput.computeRawVarint32Size(msgSize));
+            const delimited: Uint8Array = new Uint8Array(Output.computeRawVarint32Size(msgSize));
             this.writeRawVarInt32_byteArray(msgSize, delimited, 0);
 
             this.size += delimited.length;
@@ -2039,7 +1856,7 @@ export class ProtobjOutput extends WriteSession implements Output {
         // the first buffer (contains the tag)
         lastBuffer.offset = lastOffset;
 
-        const delimited: Uint8Array = new Uint8Array(ProtobjOutput.computeRawVarint32Size(msgSize));
+        const delimited: Uint8Array = new Uint8Array(Output.computeRawVarint32Size(msgSize));
         this.writeRawVarInt32_byteArray(msgSize, delimited, 0);
 
         // add the difference
@@ -2073,9 +1890,9 @@ export class ProtobjOutput extends WriteSession implements Output {
         return (n << 1) ^ (n >> 31);
     }
 
-    private static writeRawVarInt32(value: i32, session: ProtobjOutput,
+    private static writeRawVarInt32(value: i32, session: Output,
                                     lb: LinkedBuffer): LinkedBuffer {
-        const size: i32 = ProtobjOutput.computeRawVarint32Size(value);
+        const size: i32 = Output.computeRawVarint32Size(value);
 
         if (lb.offset + size > lb.buffer.length)
             lb = new LinkedBuffer(new Uint8Array(session.nextBufferSize), 0, 0, lb);
