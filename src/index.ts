@@ -470,6 +470,10 @@ export class Input {
         this.skipField(this.lastTag);
     }
 
+    handleUnknownPolymorphicField(messageIndex: i32): void {
+        this.lastTag = 0;
+        this.offset = this.packedLimit
+    }
 
     readBytes(): Uint8Array {
 
