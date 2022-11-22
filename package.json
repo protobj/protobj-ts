@@ -1,28 +1,21 @@
 {
   "name": "protobj-ts",
-  "version": "1.1.3",
-  "types": "lib/index.d.ts",
+  "version": "1.1.31",
+  "description": "protobj for typescript core lib",
+  "types": "src/index.d.ts",
+  "main": "src/index.js",
+  "type": "module",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
-    "release": "npm publish",
-    "build": "microbundle"
+    "build": "tsc"
   },
   "author": "protobj",
   "license": "MIT",
-  "description": "protobj for typescript core lib",
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
     "long": "^5.2.0"
-  },
-  "files": [
-    "lib/index.d.ts",
-    "lib/index.js",
-    "src/index.ts"
-  ],
-  "main": "lib/index.cjs",
-  "source": "src/index.ts",
-  "module": "lib/index.js",
-  "type": "module",
-  "devDependencies": {
-    "microbundle": "^0.15.1"
   }
 }
